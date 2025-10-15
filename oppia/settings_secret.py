@@ -1,0 +1,39 @@
+# This is a template file for the common settings values that are probably
+# being customized in each OppiaMobile instance. The settings_secret file is ignored by git.
+
+
+# SECURITY WARNING: keep the secret key used in production secret!
+# Read about SECRET_KEY: https://docs.djangoproject.com/en/dev/topics/signing/
+
+SECRET_KEY = 'verylatgesecretsskehyftyfile'
+
+# Database
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'oppia',
+        'USER': 'oppia',
+        'PASSWORD': 'oppia',
+        'HOST': 'db', #leave empty for default
+        'PORT': '3306', #leave empty for default
+        'OPTIONS': {
+             'charset': 'utf8mb4' 
+            },
+        'TEST': {
+            'CHARSET': "utf8mb4",
+            'COLLATION': "utf8mb4_unicode_ci",
+        }
+    }
+}
+
+
+# List of allowed hostnames
+ALLOWED_HOSTS = [ 'localhost', 'DOMAIN_NAME']
+BASESITE_URL = 'YOUR_MAIN_URL'
+
+
+# Debug mode on/off - display detail error pages
+# if DEBUG is False, you also need to properly set the ALLOWED_HOSTS setting.
+# Failing to do so will result in all requests being returned as "Bad Request (400)".
+DEBUG = True
+

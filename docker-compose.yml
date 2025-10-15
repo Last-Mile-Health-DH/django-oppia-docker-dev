@@ -1,0 +1,64 @@
+services:
+  db:
+    image: mysql:8.0.11
+    container_name: mysql_db
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}  
+      - MYSQL_DATABASE=${MYSQL_DB} 
+    volumes:
+      - db_data:/var/lib/mysql # Persistent storage for your database data
+      # - ./oppia_staging_ethiopia_2025-10-13_17-39.sql:/docker-entrypoint-initdb.d/oppia_staging_ethiopia_2025-10-13_17-39.sql:ro # Restore SQL on first run
+      - ./init-users.sql:/docker-entrypoint-initdb.d/init-users.sql:ro # Create users and grant privileges
+    ports:
+      - "3306:3306" # Expose MySQL port
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - oppia_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin_app
+    environment:
+      - PMA_HOST=${MYSQL_HOST} # Link to the database service name defined above
+      - PMA_PORT=${MYSQL_PORT} # Default MySQL port
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} # Use the same root password as the database
+      - UPLOAD_LIMIT=256M # Optional: Increase upload limit
+      - MEMORY_LIMIT=256M # Optional: Increase memory limit
+    ports:
+      - "8080:80" # Map host port 8080 to container port 80
+    depends_on:
+      - db # Ensure the database starts before phpMyAdmin
+    networks:
+      - oppia_network
+  django-oppia:
+    build:
+      context: ./oppia
+      dockerfile: Dockerfile.dev
+    container_name: django_oppia_app
+    environment:
+      - MYSQL_DB=${MYSQL_DB}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT}
+      - SECRET_KEY=${DJANGO_SECRET_KEY}
+      - DEBUG=${DJANGO_DEBUG}
+      - ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS}
+      - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME}
+      - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD}
+      - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
+    ports:
+      - "8000:8000" # Expose Django app port
+    depends_on:
+      - db # Ensure the database starts before the Django app
+    volumes:
+      - ./oppia/django-oppia:/app  # Mount the oppia folder
+    networks:
+      - oppia_network
+
+volumes:
+  db_data: # Define the named volume for database persistence
+
+networks:
+  oppia_network: # Define a custom network for the services
+    driver: bridge

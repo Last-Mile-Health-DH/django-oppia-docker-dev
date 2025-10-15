@@ -59,3 +59,7 @@ docker compose -p oppiaeth up -d --build
   ```
 
 ---
+
+## Notes
+
+- In step 3, you can clone any oppia server repository 

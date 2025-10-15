@@ -3,6 +3,9 @@
 
 This repository provides a Docker-based development environment for the OppiaMobile Django server.
 
+## Requirements
+- You need to have docker installed 
+
 ## Quick Start
 
 ### 1. Clone This Repository
@@ -63,3 +66,4 @@ docker compose -p oppiaeth up -d --build
 ## Notes
 
 - In step 3, you can clone any oppia server repository 
+- Incase you have a database file to restore,  edit the docker-compose.yml file, uncommenting the 'Restore SQL on first run' line and provide the correct file name 

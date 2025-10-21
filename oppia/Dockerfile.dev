@@ -16,6 +16,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     dos2unix \
     ffmpeg \
     gcc \
+    g++ \
+    build-essential \
+    make \
+    libffi-dev \
     libpq-dev \
     python3-dev \
     pkg-config \

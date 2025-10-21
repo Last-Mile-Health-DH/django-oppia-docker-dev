@@ -1,14 +1,18 @@
 services:
   db:
     image: mysql:8.0.11
+    platform: linux/amd64 #added this to build on Mac M chips
     container_name: mysql_db
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}  
       - MYSQL_DATABASE=${MYSQL_DB} 
+      # added mysql user and password for db to create non-root user
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql # Persistent storage for your database data
-      # - ./oppia_staging_ethiopia_2025-10-13_17-39.sql:/docker-entrypoint-initdb.d/oppia_staging_ethiopia_2025-10-13_17-39.sql:ro # Restore SQL on first run
-      - ./init-users.sql:/docker-entrypoint-initdb.d/init-users.sql:ro # Create users and grant privileges
+      - ./oppia_staging_ethiopia_2025-10-13_17-39.sql:/docker-entrypoint-initdb.d/oppia_staging_ethiopia_2025-10-13_17-39.sql:ro # Restore SQL on first run
+      # - ./init-users.sql:/docker-entrypoint-initdb.d/init-users.sql:ro # Create users and grant privileges
     ports:
       - "3306:3306" # Expose MySQL port
     command: --default-authentication-plugin=mysql_native_password
@@ -17,6 +21,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
+    platform: linux/amd64
     container_name: phpmyadmin_app
     environment:
       - PMA_HOST=${MYSQL_HOST} # Link to the database service name defined above
@@ -52,6 +57,7 @@ services:
     depends_on:
       - db # Ensure the database starts before the Django app
     volumes:
+      - ./oppia/appentrypoint.sh:/app/appentrypoint.sh 
       - ./oppia/django-oppia:/app  # Mount the oppia folder
     networks:
       - oppia_network

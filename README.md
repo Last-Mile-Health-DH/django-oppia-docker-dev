@@ -42,9 +42,13 @@ cd ..
   ```sh
   cp settings_secret.py oppia/django-oppia/oppiamobile/settings_secret.py
   ```
-- Edit `oppia/django-oppia/oppiamobile/settings_secret.py` to match your `.env` file or environment.
+Edit `oppia/django-oppia/oppiamobile/settings_secret.py` to match your `.env` file or environment.
 
 ### 5. Build and Start the Containers
+
+
+NOTE: for Mac users with the Apple M chip, please add `platform: linux/amd64` under the MYSQL db service in docker-compose.yml file to ensure compatibility on Apple Silicon before you build
+
 
 ```sh
 docker compose -p oppiaeth up -d --build

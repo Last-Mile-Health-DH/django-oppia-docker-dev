@@ -27,7 +27,7 @@ cd django-oppia-docker-dev
 
 ```sh
 cd oppia
-git clone https://github.com/OppiaEthiopia/django-oppia.git
+git clone [ oppia server repository ]
 # This creates the oppia/django-oppia subdirectory
 cd ..
 ```
@@ -47,18 +47,18 @@ cd ..
 ### 5. Build and Start the Containers
 
 ```sh
-docker compose -p oppiaeth up -d --build
+docker compose -p oppia up -d --build
 ```
 
 ### 6. Stopping and Cleaning Up
 
 - To stop the containers:
   ```sh
-  docker compose -p oppiaeth down
+  docker compose -p oppia down
   ```
 - To stop and remove volumes:
   ```sh
-  docker compose -p oppiaeth down -v
+  docker compose -p oppia down -v
   ```
 
 ---
